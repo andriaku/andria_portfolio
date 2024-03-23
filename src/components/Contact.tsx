@@ -1,53 +1,53 @@
-'use client'
+"use client";
 
-import * as z from 'zod'
-import { contactSchema } from '@/schemas/contact-schema'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
+import * as z from "zod";
+import { contactSchema } from "@/schemas/contact-schema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
   FormField,
   FormControl,
   FormMessage,
   FormItem,
-  FormLabel
-} from '@/components/ui/form'
-import { useTransition } from 'react'
-import { Button } from './ui/button'
-import { toast } from 'sonner'
-import { sendContactEmail } from '@/server/send-contact-email'
+  FormLabel,
+} from "@/components/ui/form";
+import { useTransition } from "react";
+import { Button } from "./ui/button";
+import { toast } from "sonner";
+import { sendContactEmail } from "@/server/send-contact-email";
 
 const Contact = () => {
-  const [isPending, startTransition] = useTransition()
+  const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof contactSchema>>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
-      name: '',
-      lastname: '',
-      email: '',
-      message: ''
-    }
-  })
+      name: "",
+      lastname: "",
+      email: "",
+      message: "",
+    },
+  });
 
   const handleContactSubmit = (values: z.infer<typeof contactSchema>) => {
     startTransition(() => {
       sendContactEmail(values).then((data) => {
         if (data.error) {
-          toast.error(data.error)
+          toast.error(data.error);
         }
         if (data.success) {
-          form.reset()
-          toast.success(data.success)
+          form.reset();
+          toast.success(data.success);
         }
-      })
-    })
-  }
+      });
+    });
+  };
 
   return (
-    <section className='w-full py-6 md:py-12 lg:py-20 border-t'>
+    <section id='contact' className='w-full py-6 md:py-12 lg:py-20 border-t'>
       <div className='container grid items-center gap-4 px-4 md:px-4'>
         <div className='space-y-4'>
           <div className='inline-block rounded-lg bg-primary px-3 py-1 text-sm text-white'>
@@ -152,7 +152,7 @@ const Contact = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Contact
+export default Contact;
